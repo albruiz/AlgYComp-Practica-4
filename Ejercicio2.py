@@ -79,12 +79,9 @@ def dibujamela(matriz,puntoInicio, puntoFin, tamano):
                 puertasY.append((j)/(tamano))
                 y+=1
     
-    print(contador2,'este es el contador')
     plot(paredesY, paredesX, 'sk')
     plot(puertasY, puertasX, 'sy')
-    print(puntoInicio, puntoFin, 'ldldldlddldldldldldl')
-    #plot((puntoInicio[1])/(tamano), (20 - puntoInicio[0])/(tamano),  'sc')
-    #plot(puntoFin[1]/(tamano), (20 - puntoFin[0])/(tamano), 'sr')
+
 
 # Funcion de devuelve los puntos que puede tomar el camino a seguir, es decir que no son puertas
 # Recibe como argumentos, la matriz y el punto inicial
@@ -110,7 +107,6 @@ def puntoReal(punto):
 # Recibe como parametros el peso de la matriz, y el peso acumulado
 def calculaPeso(peso, pesoAcumulado):
     if peso == 10 : 
-        print('hello')
         return 1000000
     else:
         return (pesoAcumulado + peso)
@@ -137,7 +133,6 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         peso = matriz[punto1Grande[0] - 1][punto1Grande[1]]
         #condicion para que se almacene el nuevo peso, significara que la unica vez que se almacena es que es menor que el  que estaba en la matriz
         if calculaPeso(peso, cola[valorX][valorY]) < cola[punto1[0], punto1[1]]:
-            print(calculaPeso(peso, cola[valorX][valorY]), cola[punto1[0], punto1[1]], "you")
             cola[punto1[0], punto1[1]] = calculaPeso(peso, cola[valorX][valorY])
             #plot((punto1Grande[0] - 1)/len(matriz),(20 - punto1Grande[1] )/len(matriz), 'sb')
             
@@ -179,12 +174,10 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         valorX, valorY = var1, var0
         
         cola[valorX][valorY] = minimo - 1
-        print(cola)
         if puntoReal([valorX, valorY]) == puntoFinal:
             condicion = True
         else: 
             a = puntoReal([valorX, valorY])
-            print(a)
             plot(a[0]/len(matriz),(20 - a[1] )/len(matriz), 'sb')
         if contador == 50 : condicion = True
     return 0
@@ -199,7 +192,6 @@ ratio = 1
 # solucion = [matriz de valores],[punto de inicio], [punto de fin]
 solucion = generaLaberinto(size,ratio,131)
 matriz = solucion[0]
-print(matriz)
 puntoInicial = solucion[1]
 puntoFinal = solucion[2]
 posiblesCaminos = []
@@ -210,7 +202,6 @@ for i in matriz:
         if j == 10: contador += 1
         else: pass
 
-print(contador)
 dibujamela(solucion[0],solucion[1], solucion[2], size)
 djikstra(matriz, puntoInicial, puntoFinal)
 plot((puntoInicial[1])/(size*2+1), (20 - puntoInicial[0])/(size*2+1),  'sc')
