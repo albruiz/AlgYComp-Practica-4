@@ -66,21 +66,25 @@ def dibujamela(matriz,puntoInicio, puntoFin, tamano):
     paredesX, paredesY = [],[]
     puertasX, puertasY = [],[]
     x, y = 0,0
-    for i in range(tamano):
-        for j in range(tamano):
+    contador2 = 0
+    for i in range(len(matriz)):
+        for j in range(len(matriz[i])):
             if matriz[i][j] == 10: 
-                paredesX.append(i/(tamano))
-                paredesY.append(j/(tamano))
+                paredesX.append((20 - i)/(tamano))
+                paredesY.append((j)/(tamano))
                 x+=1
+                contador2 += 1
             else:  #if matriz[i][j] == 0: 
-                puertasX.append(i/(tamano))
-                puertasY.append(j/(tamano))
+                puertasX.append((20 -i)/(tamano))
+                puertasY.append((j)/(tamano))
                 y+=1
-    plot(paredesX, paredesY, 'sk')
-    plot(puertasX, puertasY, 'sy')
-    plot(puntoInicio[0]/(tamano), puntoInicio[1]/(tamano), 'sc')
-    plot(puntoFin[0]/(tamano), puntoFin[1]/(tamano), 'sr')
-    show()
+    
+    print(contador2,'este es el contador')
+    plot(paredesY, paredesX, 'sk')
+    plot(puertasY, puertasX, 'sy')
+    print(puntoInicio, puntoFin, 'ldldldlddldldldldldl')
+    #plot((puntoInicio[1])/(tamano), (20 - puntoInicio[0])/(tamano),  'sc')
+    #plot(puntoFin[1]/(tamano), (20 - puntoFin[0])/(tamano), 'sr')
 
 # Funcion de devuelve los puntos que puede tomar el camino a seguir, es decir que no son puertas
 # Recibe como argumentos, la matriz y el punto inicial
@@ -106,6 +110,7 @@ def puntoReal(punto):
 # Recibe como parametros el peso de la matriz, y el peso acumulado
 def calculaPeso(peso, pesoAcumulado):
     if peso == 10 : 
+        print('hello')
         return 1000000
     else:
         return (pesoAcumulado + peso)
@@ -126,20 +131,23 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         #[x*2+1][y*2+1]
         # Sitios que tengo que mirar , variaciones de X++,X-- pero con la misma Y y al reves
         punto1, punto2, punto3, punto4 = [valorX - 1, valorY], [valorX + 1, valorY], [valorX, valorY - 1], [valorX, valorY + 1]
-        print(contador)
         contador += 1
         # Variantes de X
         punto1Grande = puntoReal(punto1)
         peso = matriz[punto1Grande[0] - 1][punto1Grande[1]]
         #condicion para que se almacene el nuevo peso, significara que la unica vez que se almacena es que es menor que el  que estaba en la matriz
         if calculaPeso(peso, cola[valorX][valorY]) < cola[punto1[0], punto1[1]]:
+            print(calculaPeso(peso, cola[valorX][valorY]), cola[punto1[0], punto1[1]], "you")
             cola[punto1[0], punto1[1]] = calculaPeso(peso, cola[valorX][valorY])
+            #plot((punto1Grande[0] - 1)/len(matriz),(20 - punto1Grande[1] )/len(matriz), 'sb')
+            
         else: pass
         
         punto2Grande = puntoReal(punto2)
         peso = matriz[punto2Grande[0] + 1][punto2Grande[1]]
         if calculaPeso(peso, cola[valorX][valorY]) < cola[punto2[0], punto2[1]]:
             cola[punto2[0], punto2[1]] = calculaPeso(peso, cola[valorX][valorY])
+            #plot((punto2Grande[0] + 1)/len(matriz),(20 - punto2Grande[1])/len(matriz), 'sb')
         else: pass
 
         # Variantes de Y
@@ -147,15 +155,17 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         peso = matriz[punto3Grande[0]][punto3Grande[1] - 1]
         if calculaPeso(peso, cola[valorX][valorY]) < cola[punto3[0], punto3[1]]:
             cola[punto3[0], punto3[1]] = calculaPeso(peso, cola[valorX][valorY])
+            #plot((punto3Grande[0])/len(matriz),(20 - punto3Grande[1] - 1)/len(matriz), 'sb')
         else: pass
         
         punto4Grande = puntoReal(punto4)
         peso = matriz[punto4Grande[0]][punto4Grande[1] + 1]
         if calculaPeso(peso, cola[valorX][valorY]) < cola[punto4[0], punto4[1]]:
             cola[punto4[0], punto4[1]] = calculaPeso(peso, cola[valorX][valorY])
+            #plot((punto4Grande[0])/len(matriz), (20 - punto4Grande[1] + 1)/len(matriz), 'sb')
         else: pass
+        
 
-        lista = [cola[punto1[0], punto1[1]], cola[punto2[0], punto2[1]], cola[punto3[0], punto3[1]], cola[punto4[0], punto4[1]], 1]
         var1, var0 = 0, 0
         minimo = 100000
         for i in range(len(cola)):
@@ -166,17 +176,17 @@ def djikstra(matriz, puntoInicial, puntoFinal):
                         var1, var0 = i, j
                     else: pass
                 else: pass
-        print(var1, var0, 'lolkookokkoko')
         valorX, valorY = var1, var0
+        
         cola[valorX][valorY] = minimo - 1
-        print(puntoReal([valorX, valorY]), puntoFinal)
-        if puntoReal([valorX, valorY]) == puntoFinal:
-            print(contador)
-            condicion = True
-        else: pass
         print(cola)
+        if puntoReal([valorX, valorY]) == puntoFinal:
+            condicion = True
+        else: 
+            a = puntoReal([valorX, valorY])
+            print(a)
+            plot(a[0]/len(matriz),(20 - a[1] )/len(matriz), 'sb')
         if contador == 50 : condicion = True
-    print(cola)
     return 0
 
 
@@ -189,11 +199,22 @@ ratio = 1
 # solucion = [matriz de valores],[punto de inicio], [punto de fin]
 solucion = generaLaberinto(size,ratio,131)
 matriz = solucion[0]
+print(matriz)
 puntoInicial = solucion[1]
 puntoFinal = solucion[2]
 posiblesCaminos = []
 #posiblesCaminos = djikstra(matriz, puntoInicial, puntoFinal)
+contador = 0
+for i in matriz:
+    for j in i: 
+        if j == 10: contador += 1
+        else: pass
 
+print(contador)
+dibujamela(solucion[0],solucion[1], solucion[2], size)
 djikstra(matriz, puntoInicial, puntoFinal)
-#dibujamela(solucion[0],solucion[1], solucion[2], size)
+plot((puntoInicial[1])/(size*2+1), (20 - puntoInicial[0])/(size*2+1),  'sc')
+plot(puntoFinal[1]/(size*2+1), (20 - puntoFinal[0])/(size*2+1), 'sr')
+show()
+
 
