@@ -115,9 +115,8 @@ def djikstra(matriz, puntoInicial, puntoFinal):
     cola = np.full((10,10), 1000000)
     posicionInicial = [(int)(puntoInicial[0]-1)/2 , (int)(puntoInicial[1]-1)/2]
     valorX, valorY = (int)(posicionInicial[0]), (int)(posicionInicial[1])
-    print(valorX, valorY, "estos son los putos")
     cola[valorX][valorY] = 0
-    
+    contador = 0
     # En el punto inicial el coste es 0
     condicion = False
     while condicion == False:
@@ -127,62 +126,57 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         #[x*2+1][y*2+1]
         # Sitios que tengo que mirar , variaciones de X++,X-- pero con la misma Y y al reves
         punto1, punto2, punto3, punto4 = [valorX - 1, valorY], [valorX + 1, valorY], [valorX, valorY - 1], [valorX, valorY + 1]
-        
+        print(contador)
+        contador += 1
         # Variantes de X
         punto1Grande = puntoReal(punto1)
         peso = matriz[punto1Grande[0] - 1][punto1Grande[1]]
-        cola[punto1[0], punto1[1]] = calculaPeso(peso, cola[valorX][valorY])
+        #condicion para que se almacene el nuevo peso, significara que la unica vez que se almacena es que es menor que el  que estaba en la matriz
+        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto1[0], punto1[1]]:
+            cola[punto1[0], punto1[1]] = calculaPeso(peso, cola[valorX][valorY])
+        else: pass
         
         punto2Grande = puntoReal(punto2)
         peso = matriz[punto2Grande[0] + 1][punto2Grande[1]]
-        cola[punto2[0], punto2[1]] = calculaPeso(peso, cola[valorX][valorY])
+        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto2[0], punto2[1]]:
+            cola[punto2[0], punto2[1]] = calculaPeso(peso, cola[valorX][valorY])
+        else: pass
 
         # Variantes de Y
         punto3Grande = puntoReal(punto3)
         peso = matriz[punto3Grande[0]][punto3Grande[1] - 1]
-        cola[punto3[0], punto3[1]] = calculaPeso(peso, cola[valorX][valorY])
+        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto3[0], punto3[1]]:
+            cola[punto3[0], punto3[1]] = calculaPeso(peso, cola[valorX][valorY])
+        else: pass
         
         punto4Grande = puntoReal(punto4)
         peso = matriz[punto4Grande[0]][punto4Grande[1] + 1]
-        cola[punto4[0], punto4[1]] = calculaPeso(peso, cola[valorX][valorY])
+        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto4[0], punto4[1]]:
+            cola[punto4[0], punto4[1]] = calculaPeso(peso, cola[valorX][valorY])
+        else: pass
 
         lista = [cola[punto1[0], punto1[1]], cola[punto2[0], punto2[1]], cola[punto3[0], punto3[1]], cola[punto4[0], punto4[1]], 1]
         var1, var0 = 0, 0
         minimo = 100000
         for i in range(len(cola)):
             for j in range(len(cola[i])):
-                if minimo > cola[i][j] and cola[i][j] >= cola[valorX][valorY]:
+                if minimo > cola[i][j] and cola[i][j] > cola[valorX][valorY]:
                     if i != valorX or j != valorY:
                         minimo = cola[i][j]
                         var1, var0 = i, j
                     else: pass
                 else: pass
+        print(var1, var0, 'lolkookokkoko')
         valorX, valorY = var1, var0
+        cola[valorX][valorY] = minimo - 1
+        print(puntoReal([valorX, valorY]), puntoFinal)
         if puntoReal([valorX, valorY]) == puntoFinal:
+            print(contador)
             condicion = True
         else: pass
-'''
-            if i = valorX : 
-                for j in range(len(i)):
-                    if j != valorY:
-                        if minimo > lista[i][j]:
-                            minimo = lista[i][j]
-                            var1, var2 = i, j
-                        else: pass
-                    else: pass
-            else: 
-                minAux = np.min(cola[i])
-                if minimo > minAux:
-                    minimo = minAux
-                    var1, var2 = i, j
-                else: pass
-
-
-            print(np.min(cola[i]))
-
-        print(lista, lista.index(min(lista)), np.min(cola))
-        condicion = True
-    '''
+        print(cola)
+        if contador == 50 : condicion = True
+    print(cola)
     return 0
 
 
@@ -201,5 +195,5 @@ posiblesCaminos = []
 #posiblesCaminos = djikstra(matriz, puntoInicial, puntoFinal)
 
 djikstra(matriz, puntoInicial, puntoFinal)
-dibujamela(solucion[0],solucion[1], solucion[2], size)
+#dibujamela(solucion[0],solucion[1], solucion[2], size)
 
