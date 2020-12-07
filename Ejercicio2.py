@@ -156,7 +156,6 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         if punto3[0] <= 9 and punto3[1] <= 9 and punto3[0] >= 0 and punto3[1] >= 0:
             punto3Grande = puntoReal(punto3)
             peso = matriz[punto3Grande[0]][punto3Grande[1] + 1]
-            print(calculaPeso(peso, cola[valorX][valorY]), cola[punto3[0], punto3[1]], 'madremia que jaleo3333', punto3, valorX, valorY)
             if calculaPeso(peso, cola[valorX][valorY]) < cola[punto3[0], punto3[1]]:
                 cola[punto3[0], punto3[1]] = calculaPeso(peso, cola[valorX][valorY])
             else: pass
@@ -167,7 +166,6 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         if punto4[0] <= 9 and punto4[1] <= 9 and punto4[0] >= 0 and punto4[1] >= 0:
             punto4Grande = puntoReal(punto4)
             peso = matriz[punto4Grande[0]][punto4Grande[1] - 1]
-            print(calculaPeso(peso, cola[valorX][valorY]), cola[punto4[0], punto4[1]], 'madremia que jaleo')
             if calculaPeso(peso, cola[valorX][valorY]) < cola[punto4[0], punto4[1]]:
                 cola[punto4[0], punto4[1]] = calculaPeso(peso, cola[valorX][valorY])
             else: pass
@@ -188,17 +186,14 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         valorX, valorY = var1, var0
         
         #cola[valorX][valorY] = minimo - 1
-        print(puntoReal([valorX, valorY]),puntoFinal, 'klkl', cola)
         
         if puntoReal([valorX, valorY]) == puntoFinal:
-            print('hola')
             condicion = True
         else: 
             a = puntoReal([valorX, valorY])
             plot((a[1] )/len(matriz),(len(matriz) -1 - a[0])/len(matriz), 'sb')
 
-        if contador >= 50: condicion = True
-        print(contador, "sisisisis")
+
     return 0
 
 
