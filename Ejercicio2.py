@@ -55,7 +55,6 @@ def generaLaberinto(size, ratio, semilla):
     colDes = random.randint(0, size-1)
     xentrada, yentrada =  rowDes*2+1, colDes*2+1
     matriz[xentrada][yentrada] = -2 
-
     solucion = [matriz, [xsalida,ysalida], [xentrada, yentrada]]
     return solucion
 
@@ -113,6 +112,8 @@ def calculaPeso(peso, pesoAcumulado):
 
 def djikstra(matriz, puntoInicial, puntoFinal):
     # Cola = almacena el costo de ir a cada una de las puertas (peso acumulado)
+    comprobacion = np.full((10,10), False)
+
     cola = np.full((10,10), 1000000)
     posicionInicial = [(int)(puntoInicial[0]-1)/2 , (int)(puntoInicial[1]-1)/2]
     valorX, valorY = (int)(posicionInicial[0]), (int)(posicionInicial[1])
@@ -127,45 +128,58 @@ def djikstra(matriz, puntoInicial, puntoFinal):
         #[x*2+1][y*2+1]
         # Sitios que tengo que mirar , variaciones de X++,X-- pero con la misma Y y al reves
         punto1, punto2, punto3, punto4 = [valorX - 1, valorY], [valorX + 1, valorY], [valorX, valorY - 1], [valorX, valorY + 1]
+        comprobacion[valorX, valorY] = True
         contador += 1
         # Variantes de X
-        punto1Grande = puntoReal(punto1)
-        peso = matriz[punto1Grande[0] - 1][punto1Grande[1]]
-        #condicion para que se almacene el nuevo peso, significara que la unica vez que se almacena es que es menor que el  que estaba en la matriz
-        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto1[0], punto1[1]]:
-            cola[punto1[0], punto1[1]] = calculaPeso(peso, cola[valorX][valorY])
-            #plot((punto1Grande[0] - 1)/len(matriz),(20 - punto1Grande[1] )/len(matriz), 'sb')
-            
-        else: pass
+        if punto1[0] <= 9 and punto1[1] <= 9 and punto1[0] >= 0 and punto1[1] >= 0:
+            punto1Grande = puntoReal(punto1)
+            peso = matriz[punto1Grande[0] + 1][punto1Grande[1]]
+            #condicion para que se almacene el nuevo peso, significara que la unica vez que se almacena es que es menor que el  que estaba en la matriz
+            if calculaPeso(peso, cola[valorX][valorY]) < cola[punto1[0], punto1[1]]:
+                cola[punto1[0], punto1[1]] = calculaPeso(peso, cola[valorX][valorY])
+            else: pass
+
+            if cola[punto1[0], punto1[1]] < 10000:
+                plot((punto1Grande[1]/len(matriz)), (len(matriz) - 1 - punto1Grande[0])/len(matriz), 'sb')
         
-        punto2Grande = puntoReal(punto2)
-        peso = matriz[punto2Grande[0] + 1][punto2Grande[1]]
-        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto2[0], punto2[1]]:
-            cola[punto2[0], punto2[1]] = calculaPeso(peso, cola[valorX][valorY])
-            #plot((punto2Grande[0] + 1)/len(matriz),(20 - punto2Grande[1])/len(matriz), 'sb')
-        else: pass
+        if punto2[0] <= 9 and punto2[1] <= 9 and punto2[0] >= 0 and punto2[1] >= 0:
+            punto2Grande = puntoReal(punto2)
+            peso = matriz[punto2Grande[0] - 1][punto2Grande[1]]
+            if calculaPeso(peso, cola[valorX][valorY]) < cola[punto2[0], punto2[1]]:
+                cola[punto2[0], punto2[1]] = calculaPeso(peso, cola[valorX][valorY])
+            else: pass 
+
+            if cola[punto2[0], punto2[1]] < 10000:
+                plot((punto2Grande[1])/len(matriz),( len(matriz) - 1 - punto2Grande[0])/len(matriz), 'sb')
 
         # Variantes de Y
-        punto3Grande = puntoReal(punto3)
-        peso = matriz[punto3Grande[0]][punto3Grande[1] - 1]
-        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto3[0], punto3[1]]:
-            cola[punto3[0], punto3[1]] = calculaPeso(peso, cola[valorX][valorY])
-            #plot((punto3Grande[0])/len(matriz),(20 - punto3Grande[1] - 1)/len(matriz), 'sb')
-        else: pass
+        if punto3[0] <= 9 and punto3[1] <= 9 and punto3[0] >= 0 and punto3[1] >= 0:
+            punto3Grande = puntoReal(punto3)
+            peso = matriz[punto3Grande[0]][punto3Grande[1] + 1]
+            print(calculaPeso(peso, cola[valorX][valorY]), cola[punto3[0], punto3[1]], 'madremia que jaleo3333', punto3, valorX, valorY)
+            if calculaPeso(peso, cola[valorX][valorY]) < cola[punto3[0], punto3[1]]:
+                cola[punto3[0], punto3[1]] = calculaPeso(peso, cola[valorX][valorY])
+            else: pass
+
+            if cola[punto3[0], punto3[1]] < 10000:
+                plot((punto3Grande[1])/len(matriz), (len(matriz) - 1 - punto3Grande[0])/len(matriz), 'sb') 
         
-        punto4Grande = puntoReal(punto4)
-        peso = matriz[punto4Grande[0]][punto4Grande[1] + 1]
-        if calculaPeso(peso, cola[valorX][valorY]) < cola[punto4[0], punto4[1]]:
-            cola[punto4[0], punto4[1]] = calculaPeso(peso, cola[valorX][valorY])
-            #plot((punto4Grande[0])/len(matriz), (20 - punto4Grande[1] + 1)/len(matriz), 'sb')
-        else: pass
-        
+        if punto4[0] <= 9 and punto4[1] <= 9 and punto4[0] >= 0 and punto4[1] >= 0:
+            punto4Grande = puntoReal(punto4)
+            peso = matriz[punto4Grande[0]][punto4Grande[1] - 1]
+            print(calculaPeso(peso, cola[valorX][valorY]), cola[punto4[0], punto4[1]], 'madremia que jaleo')
+            if calculaPeso(peso, cola[valorX][valorY]) < cola[punto4[0], punto4[1]]:
+                cola[punto4[0], punto4[1]] = calculaPeso(peso, cola[valorX][valorY])
+            else: pass
+
+            if cola[punto4[0], punto4[1]] < 10000:
+                plot((punto4Grande[1])/len(matriz), (len(matriz) -1 - punto4Grande[0])/len(matriz), 'sb')     
 
         var1, var0 = 0, 0
         minimo = 100000
         for i in range(len(cola)):
             for j in range(len(cola[i])):
-                if minimo > cola[i][j] and cola[i][j] > cola[valorX][valorY]:
+                if minimo > cola[i][j] and cola[i][j] >= cola[valorX][valorY] and comprobacion[i][j] == False:
                     if i != valorX or j != valorY:
                         minimo = cola[i][j]
                         var1, var0 = i, j
@@ -173,13 +187,18 @@ def djikstra(matriz, puntoInicial, puntoFinal):
                 else: pass
         valorX, valorY = var1, var0
         
-        cola[valorX][valorY] = minimo - 1
+        #cola[valorX][valorY] = minimo - 1
+        print(puntoReal([valorX, valorY]),puntoFinal, 'klkl', cola)
+        
         if puntoReal([valorX, valorY]) == puntoFinal:
+            print('hola')
             condicion = True
         else: 
             a = puntoReal([valorX, valorY])
-            plot(a[0]/len(matriz),(20 - a[1] )/len(matriz), 'sb')
-        if contador == 50 : condicion = True
+            plot((a[1] )/len(matriz),(len(matriz) -1 - a[0])/len(matriz), 'sb')
+
+        if contador >= 50: condicion = True
+        print(contador, "sisisisis")
     return 0
 
 
@@ -190,7 +209,7 @@ solucion = []
 size = 10
 ratio = 1
 # solucion = [matriz de valores],[punto de inicio], [punto de fin]
-solucion = generaLaberinto(size,ratio,131)
+solucion = generaLaberinto(size,ratio,123)
 matriz = solucion[0]
 puntoInicial = solucion[1]
 puntoFinal = solucion[2]
