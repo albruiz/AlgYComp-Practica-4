@@ -1,3 +1,6 @@
+# Alberto Ruiz - @albruiz
+# Algoritmos y Computacion - UVa
+
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,6 +11,8 @@ from pylab import *
 import random
 
 
+# Funcion que crea la matriz con las habitaciones y las paredes, ademas de dar el punto inicio y fin
+# Recibe como parametros el tamaño de la matriz de habitaciones, el ratio de paredes que tiene que eliminar y la semilla de random
 
 def generaLaberinto(size, ratio, semilla):
     matriz_size = size*2+1
@@ -59,31 +64,39 @@ def generaLaberinto(size, ratio, semilla):
     solucion = [matriz, [xsalida,ysalida], [xentrada, yentrada]]
     return solucion
 
+# Funcion que dibuja la matriz con su punto de inicio, punto de fin y el laberinto
+# toma como argumentos, la matriz, el punto de inicio, el punto de fin y el tamano de la matriz
 def dibujamela(matriz,puntoInicio, puntoFin, tamano):
     tamano = tamano*2 +1
     paredesX, paredesY = [],[]
     puertasX, puertasY = [],[]
     x, y = 0,0
-    for i in range(tamano):
-        for j in range(tamano):
+    contador2 = 0
+    for i in range(len(matriz)):
+        for j in range(len(matriz[i])):
             if matriz[i][j] == 10: 
-                paredesX.append(i/(tamano))
-                paredesY.append(j/(tamano))
+                paredesX.append((len(matriz)- 1 - i)/(tamano))
+                paredesY.append((j)/(tamano))
                 x+=1
+                contador2 += 1
             else:  #if matriz[i][j] == 0: 
-                puertasX.append(i/(tamano))
-                puertasY.append(j/(tamano))
+                puertasX.append((len(matriz)- 1 -i)/(tamano))
+                puertasY.append((j)/(tamano))
                 y+=1
-    plot(paredesX, paredesY, 'sm')
-    plot(puertasX, puertasY, 'sy')
-    plot(puntoInicio[0]/(tamano), puntoInicio[1]/(tamano), 'sc')
-    plot(puntoFin[0]/(tamano), puntoFin[1]/(tamano), 'sr')
-    show()
+    
+    plot(paredesY, paredesX, 'sk')
+    plot(puertasY, puertasX, 'sy')
 
 #main
 solucion = []
 size = 10
 ratio = 1
-solucion = generaLaberinto(size,ratio,131)
+solucion = generaLaberinto(size,ratio,seed)
+matriz = solucion[0]
+puntoInicial = solucion[1]
+puntoFinal = solucion[2]
 dibujamela(solucion[0],solucion[1], solucion[2], size)
+plot((puntoInicial[1])/(size*2+1), (len(matriz)- 1 - puntoInicial[0])/(size*2+1),  'sc')
+plot(puntoFinal[1]/(size*2+1), (len(matriz)- 1 - puntoFinal[0])/(size*2+1), 'sr')
+show()
 
